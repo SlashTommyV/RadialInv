@@ -45,6 +45,7 @@ function Maid:CleanUp(key: any): ()
 	end
 end
 
+-- // Clean function for maid
 function Maid._Clean(task: any)
 	if typeof(task) == "RBXScriptConnection" then
 		if task.Connected then task:Disconnect() end
@@ -59,6 +60,6 @@ function Maid._Clean(task: any)
 	end
 end
 
--- test hello
+-- yo work pls and sync im so confused like fr
 
 return Maid
