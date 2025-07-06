@@ -5,7 +5,6 @@ local Player = game:GetService("Players")
 
 local InventoryEvents = ReplicatedStorage.InventoryEvents
 
-local AddItem = InventoryEvents.AddItem
 local SyncInventory = InventoryEvents.SyncInventory
 local EquipEvent = InventoryEvents.EquipItem
 local UpdateClient = InventoryEvents.UpdateClient
@@ -24,13 +23,13 @@ local Maid = require(ReplicatedStorage.Modules.Shared.Maid).New()
 -- // Player Joins, loads inventory to server
 Player.PlayerAdded:Connect(function(player)
 	player.CharacterAdded:Wait()
-	
+
 	-- // Create Inventory
 	local playerInventory = ServerInventoryHandler.CreateInventory(player)
 	playerInventory:LoadBackpack()
-	
+
 	playerInventories[player.Name] = playerInventory
-	
+
 	-- // Listeners
 	Maid:GiveTask(player.Backpack.ChildAdded:Connect(function(item)
 		if not playerInventories[player.Name]:GetSlotByItem(item) then
@@ -40,7 +39,9 @@ Player.PlayerAdded:Connect(function(player)
 
 	Maid:GiveTask(player.Backpack.ChildRemoved:Connect(function(item)
 		task.defer(function()
-			if item.Parent == player.Character then return end
+			if item.Parent == player.Character then
+				return
+			end
 
 			if playerInventories[player.Name]:GetSlotByItem(item) then
 				playerInventories[player.Name]:RemoveItem(item)
@@ -48,7 +49,7 @@ Player.PlayerAdded:Connect(function(player)
 
 				UpdateClient:FireClient(player, updatedInventory)
 			end
-		end)	
+		end)
 	end))
 
 	Maid:GiveTask(player.Character.ChildAdded:Connect(function(item)
@@ -59,8 +60,10 @@ Player.PlayerAdded:Connect(function(player)
 
 	Maid:GiveTask(player.Character.ChildRemoved:Connect(function(item)
 		task.defer(function()
-			if item.Parent == player.Backpack then return end
-			warn("Destroying "..item.Name)
+			if item.Parent == player.Backpack then
+				return
+			end
+			warn("Destroying " .. item.Name)
 
 			if playerInventories[player.Name]:GetSlotByItem(item) then
 				playerInventories[player.Name]:RemoveItem(item)

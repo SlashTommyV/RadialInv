@@ -6,12 +6,12 @@ Tweens.__index = Tweens
 -- // Setup tweens for scripts // --
 function Tweens.new(Target, tweenInfo: TweenInfo, tweenProperties: {})
 	local self = setmetatable({}, Tweens)
-	
+
 	self.Target = Target
 	self.tweenInfo = tweenInfo
-	self.properties = tweenProperties 
+	self.properties = tweenProperties
 	self.tween = TweenService:Create(Target, tweenInfo, tweenProperties)
-	
+
 	return self
 end
 

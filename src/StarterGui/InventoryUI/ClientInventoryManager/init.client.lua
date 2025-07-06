@@ -1,6 +1,5 @@
 local UIS = game:GetService("UserInputService")
 local Lighting = game:GetService("Lighting")
-local player = game:GetService("Players").LocalPlayer
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- // EVENTS // --
@@ -13,19 +12,13 @@ local UpdateClient = InventoryEvents.UpdateClient
 
 local BackpackUI = script.Parent
 local InvFrame = BackpackUI.InvFrame
-local SlotSelector = InvFrame.SlotSelector
-local ItemName = InvFrame.ItemName
 
 local currentCam = workspace.CurrentCamera
 
 --// VARIABLES //--
 
-local lastSelected = nil
-local currentSelected = nil
 local playerInput = "PC"
 local Debounce = false
-
-local PlayerRegistery = nil
 
 --// MODULES //--
 
@@ -51,35 +44,36 @@ local function getPrefferedInput()
 	end
 end
 
-
 -- // Open System // --
 UIS.InputBegan:Connect(function(input, GPE)
-	if GPE then return end
-	
+	if GPE then
+		return
+	end
+
 	if input.KeyCode == InventorySettings[playerInput].ToggleInventory then
 		if BackpackUI.Enabled then
 			BackpackUI.Enabled = false
-			
-			TweenHandler.new(Lighting.Blur, tweenInfoFastOut, {Size = 0}):Play()
-			TweenHandler.new(currentCam, tweenInfoFastOut, {FieldOfView = 70}):Play()
-			
+
+			TweenHandler.new(Lighting.Blur, tweenInfoFastOut, { Size = 0 }):Play()
+			TweenHandler.new(currentCam, tweenInfoFastOut, { FieldOfView = 70 }):Play()
+
 			InventoryHandler:ClearConnections()
 		else
-			InventoryHandler:SetupUI(InvFrame, SlotSelector)
-			
+			InventoryHandler:SetupUI(InvFrame)
+
 			BackpackUI.Enabled = true
-			TweenHandler.new(Lighting.Blur, tweenInfoFastOut, {Size = 16}):Play()
-			TweenHandler.new(currentCam, tweenInfoFastOut, {FieldOfView = 60}):Play()
+			TweenHandler.new(Lighting.Blur, tweenInfoFastOut, { Size = 16 }):Play()
+			TweenHandler.new(currentCam, tweenInfoFastOut, { FieldOfView = 60 }):Play()
 		end
 	elseif input.KeyCode == InventorySettings[playerInput].UnEquipSlot then
 		InventoryHandler:UnEquipSlot(InvFrame)
 	end
-	
+
 	for i, key in ipairs(InventorySettings[playerInput].EquipSlots) do
 		if input.KeyCode == key and not Debounce then
 			Debounce = true
 			InventoryHandler:EquipSlot(i, InvFrame)
-			task.wait(.1)
+			task.wait(0.1)
 			Debounce = false
 		end
 	end

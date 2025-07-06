@@ -56,7 +56,7 @@ function Maid._Clean(task: any)
 	end
 
 	if typeof(task) == "thread" then
-		if coroutine.status(task) == "Suspended" then
+		if coroutine.status(task) == "suspended" then
 			coroutine.close(task)
 		end
 	end
